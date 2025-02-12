@@ -1,5 +1,6 @@
 package com.backend.pfe.service.impl;
 
+import com.backend.pfe.service.JWTService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -13,7 +14,7 @@ import java.util.Date;
 import java.util.function.Function;
 
 @Service
-public class JWTServiceImpl {
+public class JWTServiceImpl implements JWTService {
 
     // مفتاح سري مشفر بتنسيق Base64 يستخدم لتوقيع وفك تشفير JWT
     private static final String SECRET_KEY = "U0cuU1NBUFA=";
@@ -26,6 +27,11 @@ public class JWTServiceImpl {
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // تعيين وقت انتهاء صلاحية التوكن (10 ساعات)
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256) // توقيع التوكن باستخدام المفتاح السري
                 .compact(); // إنشاء التوكن بشكل مضغوط
+    }
+
+    @Override
+    public String extractUserName(String token) {
+        return "";
     }
 
     // طريقة لاستخراج اسم المستخدم من التوكن

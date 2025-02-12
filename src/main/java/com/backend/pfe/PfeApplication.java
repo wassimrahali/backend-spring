@@ -27,9 +27,9 @@ public class PfeApplication implements CommandLineRunner {
 		System.out.println(adminAccount);
 		if(null == adminAccount) {
 			User user = new User();
-			user.setFirstName("admin");
-			user.setLastName("admin");
-			user.setEmail("admin@gmail.com");
+			user.setFirstName("wassim");
+			user.setLastName("rahali");
+			user.setEmail("wassim.rahali@sofrecom.com");
 			user.setPassword(new BCryptPasswordEncoder().encode("admin"));
 			user.setRole(Role.ADMIN);
 			userRepository.save(user);

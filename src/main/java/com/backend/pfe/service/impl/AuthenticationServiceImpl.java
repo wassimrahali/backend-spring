@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
 
-    private UserRepository userRepository;
-    private  PasswordEncoder passwordEncoder;
+    private  UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
 
     public User signUp(SignUpRequest signUpRequest) {
         User user = new User();
