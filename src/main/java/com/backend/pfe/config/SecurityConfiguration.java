@@ -3,7 +3,7 @@ package com.backend.pfe.config;
 import com.backend.pfe.entites.Role;
 import com.backend.pfe.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,18 +22,26 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+
 public class SecurityConfiguration {
 
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
-    private UserService userService;
+    // Marking these fields as final ensures they are injected via the constructor.
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthenticationFilter ;
+
+    @Autowired
+    private  UserService userService ;
+
+
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("/api/v1/admin").hasAnyAuthority(Role.ADMIN.name())
-                        .requestMatchers("/api/v1/manager").hasAnyAuthority(Role.MANAGER.name())
+                        .requestMatchers("/api/v1/admin").hasAuthority(Role.ADMIN.name())
+                        .requestMatchers("/api/v1/manager").hasAuthority(Role.MANAGER.name())
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -46,23 +54,19 @@ public class SecurityConfiguration {
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        // Ensure userService is properly injected and userDetailsService() returns a valid UserDetailsService.
         daoAuthenticationProvider.setUserDetailsService(userService.userDetailsService());
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder()); // Assuming you have a passwordEncoder bean.
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return daoAuthenticationProvider;
     }
-
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
-
 }
