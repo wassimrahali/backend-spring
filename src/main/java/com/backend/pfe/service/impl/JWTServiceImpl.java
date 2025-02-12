@@ -53,4 +53,13 @@ public class JWTServiceImpl {
                 .parseClaimsJws(token) // تحليل التوكن
                 .getBody(); // استخراج المعلومات (Claims) من التوكن
     }
+
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        final String username = extractUsername(token); // استخراج اسم المستخدم من التوكن
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token)); // التحقق من أن اسم المستخدم متطابق مع اسم المستخدم في التوكن وأن التوكن غير منتهي
+    }
+
+    public boolean isTokenExpired(String token) {
+        return extractClaim(token,Claims::getExpiration).before(new Date());
+    }
 }
