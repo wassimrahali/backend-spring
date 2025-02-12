@@ -22,7 +22,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setFirstName(signUpRequest.getFirstName());
         user.setLastName(signUpRequest.getLastName());
         user.setEmail(signUpRequest.getEmail());
-        user.setRole(Role.MANAGER);
+
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
 
         return userRepository.save(user);
