@@ -14,8 +14,7 @@ import org.springframework.stereotype.Service;
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
-
+    private  PasswordEncoder passwordEncoder;
 
     public User signUp(SignUpRequest signUpRequest) {
         User user = new User();
@@ -25,7 +24,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setEmail(signUpRequest.getEmail());
         user.setRole(Role.MANAGER);
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-        return userRepository.save(user);
 
+        return userRepository.save(user);
     }
 }

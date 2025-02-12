@@ -1,5 +1,8 @@
 package com.backend.pfe.service;
 
-public interface AuthenticationService {
+import com.backend.pfe.dto.SignUpRequest;
+import com.backend.pfe.entites.User;
 
+public interface AuthenticationService {
+    User signUp(SignUpRequest signUpRequest);
 }
