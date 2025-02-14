@@ -6,13 +6,21 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
+
+
+
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
+    @Override
     public UserDetailsService userDetailsService() {
         return new UserDetailsService() {
             @Override
@@ -21,5 +29,28 @@ public class UserServiceImpl implements UserService {
                         .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
             }
         };
+    }
+
+    public String createPasswordResetToken(String email) {
+        var user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        String token = UUID.randomUUID().toString();
+        user.setResetToken(token);
+        userRepository.save(user); // Ensure the user is saved with the new token
+        return token;
+    }
+
+    public boolean validatePasswordResetToken(String token) {
+        return userRepository.findByResetToken(token).isPresent();
+    }
+
+    public boolean resetPassword(String token, String newPassword) {
+        var user = userRepository.findByResetToken(token).orElse(null);
+        if (user != null) {
+            user.setPassword(passwordEncoder.encode(newPassword));
+            user.setResetToken(null);
+            userRepository.save(user);
+            return true;
+        }
+        return false;
     }
 }
