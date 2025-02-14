@@ -1,6 +1,7 @@
 package com.backend.pfe.service.impl;
 
 import com.backend.pfe.dto.JwtAuthentificationResponse;
+import com.backend.pfe.dto.RefreshTokenRequest;
 import com.backend.pfe.dto.SignInRequest;
 import com.backend.pfe.dto.SignUpRequest;
 import com.backend.pfe.entites.Role;
@@ -38,11 +39,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public JwtAuthentificationResponse signIn(SignInRequest signInRequest) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(signInRequest.getEmail(), signInRequest.getPassword())
-        );
         var user = userRepository.findByEmail(signInRequest.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(signInRequest.getEmail(), signInRequest.getPassword())
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Invalid email or password");
+        }
+
         var jwt = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(new HashMap<>(), user);
         JwtAuthentificationResponse response = new JwtAuthentificationResponse();
@@ -50,4 +57,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         response.setRefreshToken(refreshToken);
         return response;
     }
+
+
+    public JwtAuthentificationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
+        String userEmail = jwtService.extractUserName(refreshTokenRequest.getToken());
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        if (jwtService.isTokenValid(refreshTokenRequest.getToken(), user)) {
+            var jwt = jwtService.generateToken(user);
+            JwtAuthentificationResponse response = new JwtAuthentificationResponse();
+            response.setToken(jwt);
+            response.setRefreshToken(refreshTokenRequest.getToken());
+            return response;
+        }
+        return null;
+    }
+
 }
