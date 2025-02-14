@@ -1,6 +1,7 @@
 package com.backend.pfe.controller;
 
 import com.backend.pfe.dto.JwtAuthentificationResponse;
+import com.backend.pfe.dto.RefreshTokenRequest;
 import com.backend.pfe.dto.SignInRequest;
 import com.backend.pfe.dto.SignUpRequest;
 import com.backend.pfe.entites.User;
@@ -24,5 +25,11 @@ public class AuthentificationController {
     @PostMapping("/signin")
     public ResponseEntity<JwtAuthentificationResponse> signin(@RequestBody SignInRequest signInRequest) {
         return ResponseEntity.ok(authenticationService.signIn(signInRequest));
+    }
+
+
+    @PostMapping("/refresh")
+    public ResponseEntity<JwtAuthentificationResponse> refresh(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        return ResponseEntity.ok(authenticationService.refreshToken(refreshTokenRequest));
     }
 }

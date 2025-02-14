@@ -18,7 +18,6 @@ import java.util.function.Function;
 @Service
 public class JWTServiceImpl implements JWTService {
 
-    // Replace with your generated standard Base64 key (no '_' character)
     private static final String SECRET_KEY = "z8Z3VfqPp1YxWwO2tR7mNkL5bJ9cSdA0eH4iG6uC7yT/Xg=";
 
     @Override
