@@ -11,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
 
 import java.util.HashMap;
 import java.util.List;
@@ -58,7 +59,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return response;
     }
 
-
+    @Override
     public JwtAuthentificationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
         String userEmail = jwtService.extractUserName(refreshTokenRequest.getToken());
         User user = userRepository.findByEmail(userEmail)
@@ -72,9 +73,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
         return null;
     }
-
-
-
 
     @Override
     public User getManagerById(Integer id) {
@@ -92,15 +90,22 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setRole(Role.MANAGER);
         userRepository.save(user);
 
-        // Send email with access details
-        emailService.sendEmail(user.getEmail(), "Manager Account Created",
-                "Your manager account has been created. Email: " + user.getEmail() + ", Password: " + request.getPassword());
+        // Prepare the email context
+        Context context = new Context();
+        context.setVariable("firstName", user.getFirstName());
+        context.setVariable("email", user.getEmail());
+        context.setVariable("password", request.getPassword());
+
+        // Send HTML email with access details
+        emailService.sendHtmlEmail(
+                user.getEmail(),
+                "Manager Account Created",
+                "manager-account-created", // Template name (without .html)
+                context
+        );
 
         return user;
     }
-
-
-
 
     @Override
     public List<User> getAllManagers() {
@@ -111,7 +116,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public User updateManager(Integer id, ManagerRegistrationRequest request) {
-        User user = userRepository.findById(Long.valueOf(id)).orElseThrow(() -> new RuntimeException("Manager not found"));
+        User user = userRepository.findById(Long.valueOf(id))
+                .orElseThrow(() -> new RuntimeException("Manager not found"));
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
@@ -124,8 +130,4 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public void deleteManager(Integer id) {
         userRepository.deleteById(Long.valueOf(id));
     }
-
-
-
-
 }

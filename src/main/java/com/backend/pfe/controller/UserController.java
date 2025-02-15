@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.http.ResponseEntity.*;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/manager")
 @RequiredArgsConstructor
 public class UserController {
 

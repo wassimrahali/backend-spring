@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manager Account Created</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            font-size: 24px;
+            color: #007BFF;
+            margin-bottom: 20px;
+        }
+        .content {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <div class="header">Manager Account Created</div>
+    <div class="content">
+        <p>Hello <span th:text="${firstName}"></span>,</p>
+        <p>Your manager account has been successfully created. Below are your login details:</p>
+        <p><strong>Email:</strong> <span th:text="${email}"></span></p>
+        <p><strong>Password:</strong> <span th:text="${password}"></span></p>
+        <p>Please ensure to change your password after your first login.</p>
+    </div>
+    <div class="footer">
+        <p>Best regards,</p>
+        <p>Your Company Team</p>
+    </div>
+</div>
+</body>
+</html>
