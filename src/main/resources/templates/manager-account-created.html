@@ -2,52 +2,155 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manager Account Created</title>
     <style>
+        :root {
+            --primary-color: #2563eb;
+            --accent-color: #3b82f6;
+            --text-color: #1f2937;
+            --light-text: #6b7280;
+            --background: #f9fafb;
+            --card-bg: #ffffff;
+            --border-color: #e5e7eb;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: var(--background);
+            color: var(--text-color);
             margin: 0;
-            padding: 0;
-        }
-        .email-container {
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .header {
-            font-size: 24px;
-            color: #007BFF;
-            margin-bottom: 20px;
-        }
-        .content {
-            font-size: 16px;
+            padding: 30px 20px;
             line-height: 1.6;
         }
+
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 10px 15px rgba(0, 0, 0, 0.03);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo img {
+            height: 40px;
+        }
+
+        .header {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .content {
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        .credentials {
+            margin: 25px 0;
+            padding: 20px;
+            background-color: var(--background);
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .credentials p {
+            margin: 10px 0;
+        }
+
+        .notice {
+            margin: 25px 0;
+            padding: 15px;
+            background-color: #fffbeb;
+            border-radius: 8px;
+            border-left: 4px solid #f59e0b;
+            color: #92400e;
+        }
+
         .footer {
-            margin-top: 20px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
             font-size: 14px;
-            color: #777;
+            color: var(--light-text);
+        }
+
+        .social-links {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .social-links a {
+            display: inline-block;
+            margin: 0 10px;
+            color: var(--light-text);
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .company-info {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--light-text);
+        }
+
+        @media only screen and (max-width: 600px) {
+            .email-container {
+                padding: 25px;
+            }
         }
     </style>
 </head>
 <body>
 <div class="email-container">
+    <div class="logo">
+        <!-- Placeholder for company logo -->
+        <img src="https://www.sofrecom.com/media/layout/img/logo-2024.png" alt="Sofrecom Campany" />
+    </div>
+
     <div class="header">Manager Account Created</div>
+
     <div class="content">
         <p>Hello <span th:text="${firstName}"></span>,</p>
-        <p>Your manager account has been successfully created. Below are your login details:</p>
-        <p><strong>Email:</strong> <span th:text="${email}"></span></p>
-        <p><strong>Password:</strong> <span th:text="${password}"></span></p>
-        <p>Please ensure to change your password after your first login.</p>
+        <p>Your manager account has been successfully created for your organization's portal. You can now access the management dashboard with the credentials below:</p>
+
+        <div class="credentials">
+            <p><strong>Email:</strong> <span th:text="${email}"></span></p>
+            <p><strong>Password:</strong> <span th:text="${password}"></span></p>
+        </div>
+
+        <div class="notice">
+            <p><strong>Important:</strong> Please change your password after your first login for security purposes.</p>
+        </div>
+
+        <p>If you have any questions or need assistance, please contact our support team.</p>
     </div>
+
     <div class="footer">
-        <p>Best regards,</p>
-        <p>Your Company Team</p>
+        <p>Best regards,<br>The Your Company Team</p>
+
+        <div class="social-links">
+            <a href="#">Twitter</a> • <a href="#">LinkedIn</a> • <a href="#">Facebook</a>
+        </div>
+
+        <div class="company-info">
+            <p>Your Company, Inc. • 123 Business Street, Suite 100 • Business City, ST 12345</p>
+            <p>© 2025 Your Company. All rights reserved.</p>
+        </div>
     </div>
 </div>
 </body>
