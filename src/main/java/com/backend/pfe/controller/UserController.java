@@ -15,7 +15,7 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<String> sayHello(){
-        return ok("Hello User");
+        return ok("Hello I'm a manger");
     }
 
 }

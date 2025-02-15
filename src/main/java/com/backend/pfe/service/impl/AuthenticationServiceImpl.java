@@ -1,9 +1,6 @@
 package com.backend.pfe.service.impl;
 
-import com.backend.pfe.dto.JwtAuthentificationResponse;
-import com.backend.pfe.dto.RefreshTokenRequest;
-import com.backend.pfe.dto.SignInRequest;
-import com.backend.pfe.dto.SignUpRequest;
+import com.backend.pfe.dto.*;
 import com.backend.pfe.entites.Role;
 import com.backend.pfe.entites.User;
 import com.backend.pfe.repository.UserRepository;
@@ -25,6 +22,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JWTService jwtService;
+    private final EmailService emailService;
 
     @Override
     public User signUp(SignUpRequest signUpRequest) {
@@ -33,7 +31,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setLastName(signUpRequest.getLastName());
         user.setEmail(signUpRequest.getEmail());
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-        user.setRole(Role.COLLABORATOR);
+        user.setRole(Role.ADMIN);
         return userRepository.save(user);
     }
 
@@ -71,6 +69,28 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             return response;
         }
         return null;
+    }
+
+
+
+
+
+
+    @Override
+    public User createManager(ManagerRegistrationRequest request) {
+        User user = new User();
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRole(Role.MANAGER);
+        userRepository.save(user);
+
+        // Send email with access details
+        emailService.sendEmail(user.getEmail(), "Manager Account Created",
+                "Your manager account has been created. Email: " + user.getEmail() + ", Password: " + request.getPassword());
+
+        return user;
     }
 
 }
