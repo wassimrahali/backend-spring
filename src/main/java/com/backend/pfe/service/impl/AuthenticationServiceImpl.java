@@ -13,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -74,7 +76,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 
 
-
+    @Override
+    public User getManagerById(Integer id) {
+        return userRepository.findById(Long.valueOf(id))
+                .orElseThrow(() -> new RuntimeException("Manager not found"));
+    }
 
     @Override
     public User createManager(ManagerRegistrationRequest request) {
@@ -92,5 +98,34 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         return user;
     }
+
+
+
+
+    @Override
+    public List<User> getAllManagers() {
+        return userRepository.findAll().stream()
+                .filter(user -> user.getRole() == Role.MANAGER)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public User updateManager(Integer id, ManagerRegistrationRequest request) {
+        User user = userRepository.findById(Long.valueOf(id)).orElseThrow(() -> new RuntimeException("Manager not found"));
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        userRepository.save(user);
+        return user;
+    }
+
+    @Override
+    public void deleteManager(Integer id) {
+        userRepository.deleteById(Long.valueOf(id));
+    }
+
+
+
 
 }
