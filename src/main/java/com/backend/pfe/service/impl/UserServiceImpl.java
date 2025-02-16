@@ -1,5 +1,7 @@
 package com.backend.pfe.service.impl;
 
+import com.backend.pfe.entites.Role;
+import com.backend.pfe.entites.User;
 import com.backend.pfe.repository.UserRepository;
 import com.backend.pfe.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -52,5 +56,24 @@ public class UserServiceImpl implements UserService {
             return true;
         }
         return false;
+    }
+
+
+
+    @Override
+    public User addCollaborator(User collaborator) {
+        collaborator.setPassword(passwordEncoder.encode(collaborator.getPassword()));
+        collaborator.setRole(Role.COLLABORATOR); // Set the role to COLLABORATOR
+        return userRepository.save(collaborator);
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public List<User> findAllByTeamId(Integer teamId) {
+        return userRepository.findAllByTeamId(teamId);
     }
 }

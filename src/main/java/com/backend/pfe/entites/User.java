@@ -27,7 +27,12 @@ public class User implements UserDetails {
     private String resetToken;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role = Role.COLLABORATOR; // Set default role
+
+
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private Team team;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
