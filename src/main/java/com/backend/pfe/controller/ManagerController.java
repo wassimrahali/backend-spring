@@ -11,7 +11,7 @@ import static org.springframework.http.ResponseEntity.*;
 @RestController
 @RequestMapping("/api/v1/manager")
 @RequiredArgsConstructor
-public class UserController {
+public class ManagerController {
 
     @GetMapping
     public ResponseEntity<String> sayHello(){

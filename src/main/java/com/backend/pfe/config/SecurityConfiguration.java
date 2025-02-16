@@ -33,6 +33,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/api/v1/admin").hasAuthority(Role.ADMIN.name())
                         .requestMatchers("/api/v1/manager").hasAuthority(Role.MANAGER.name())
+                        .requestMatchers("/api/v1/collaborator").hasAuthority(Role.COLLABORATOR.name())
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
