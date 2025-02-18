@@ -24,7 +24,7 @@ public class ManagerController {
         return ResponseEntity.ok(teamService.createTeam(team));
     }
 
-    @PostMapping("/add-collaborator")
+    @PostMapping("/create-collaborator")
     public ResponseEntity<ResponseEntity<String>> addCollaborator(@RequestBody User collaborator) {
         return ResponseEntity.ok(userService.addCollaborator(collaborator));
     }

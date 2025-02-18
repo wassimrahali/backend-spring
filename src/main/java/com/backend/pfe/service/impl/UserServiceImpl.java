@@ -1,4 +1,5 @@
 package com.backend.pfe.service.impl;
+import org.thymeleaf.context.Context;
 
 import com.backend.pfe.entites.Role;
 import com.backend.pfe.entites.User;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     @Override
     public UserDetailsService userDetailsService() {
@@ -67,9 +69,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<String> addCollaborator(User collaborator) {
-        collaborator.setPassword(passwordEncoder.encode(collaborator.getPassword()));
+        collaborator.setPassword(collaborator.getPassword());
         collaborator.setRole(Role.COLLABORATOR); // Set the role to COLLABORATOR
         userRepository.save(collaborator);
+
+        // Prepare the email context
+        Context context = new Context();
+        context.setVariable("firstName", collaborator.getFirstName());
+        context.setVariable("email", collaborator.getEmail());
+        context.setVariable("password", collaborator.getPassword());
+
+        // Send HTML email with access details
+        emailService.sendHtmlEmail(
+                collaborator.getEmail(),
+                "Collaborator Account Created",
+                "collaborator-account-created", // Template name (without .html)
+                context
+        );
+
         return ResponseEntity.ok("added collaborator successfully");
     }
 
