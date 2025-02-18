@@ -1,5 +1,6 @@
 package com.backend.pfe.entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Setter;
@@ -27,7 +28,13 @@ public class User implements UserDetails {
     private String resetToken;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role = Role.COLLABORATOR; // Set default role
+
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private Team team;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
