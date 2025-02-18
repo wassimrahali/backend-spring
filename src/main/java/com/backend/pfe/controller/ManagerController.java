@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/manager")
 @RequiredArgsConstructor
@@ -23,9 +25,16 @@ public class ManagerController {
     }
 
     @PostMapping("/add-collaborator")
-    public ResponseEntity<User> addCollaborator(@RequestBody User collaborator) {
+    public ResponseEntity<ResponseEntity<String>> addCollaborator(@RequestBody User collaborator) {
         return ResponseEntity.ok(userService.addCollaborator(collaborator));
     }
+
+    @GetMapping("/collaborators/{managerId}")
+    public ResponseEntity<List<User>> getCollaboratorsByManagerId(@PathVariable Integer managerId) {
+        return ResponseEntity.ok(userService.getCollaboratorsByManagerId(managerId));
+    }
+
+
 
     @GetMapping("/hello")
     public ResponseEntity<String> sayHello() {

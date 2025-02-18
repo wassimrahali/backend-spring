@@ -5,6 +5,7 @@ import com.backend.pfe.entites.User;
 import com.backend.pfe.repository.UserRepository;
 import com.backend.pfe.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,8 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
-
+import java.util.stream.Collectors;
 
 
 @Service
@@ -59,13 +59,21 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    public List<User> getCollaboratorsByManagerId(Integer managerId) {
+        return userRepository.findAll().stream()
+                .filter(user -> user.getTeam() != null && user.getTeam().getManager().getId().equals(managerId))
+                .collect(Collectors.toList());
+    }
 
     @Override
-    public User addCollaborator(User collaborator) {
+    public ResponseEntity<String> addCollaborator(User collaborator) {
         collaborator.setPassword(passwordEncoder.encode(collaborator.getPassword()));
         collaborator.setRole(Role.COLLABORATOR); // Set the role to COLLABORATOR
-        return userRepository.save(collaborator);
+        userRepository.save(collaborator);
+        return ResponseEntity.ok("added collaborator successfully");
     }
+
+
 
     @Override
     public Optional<User> findByEmail(String email) {
@@ -75,5 +83,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAllByTeamId(Integer teamId) {
         return userRepository.findAllByTeamId(teamId);
+    }
+
+    @Override
+    public List<User> getAllCollaborators() {
+        return List.of();
     }
 }

@@ -3,6 +3,8 @@ package com.backend.pfe.controller;
 import com.backend.pfe.dto.ManagerRegistrationRequest;
 import com.backend.pfe.entites.User;
 import com.backend.pfe.service.AuthenticationService;
+import com.backend.pfe.service.TeamService;
+import com.backend.pfe.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +15,8 @@ import java.util.List;
 @RequestMapping("/api/v1/admin")
 @RequiredArgsConstructor
 public class AdminController {
-
+    private final TeamService teamService;
+    private final UserService userService;
     private final AuthenticationService authenticationService;
 
     @PostMapping("/create-manager")
@@ -40,5 +43,11 @@ public class AdminController {
     @GetMapping("/manager/{id}")
     public ResponseEntity<User> getManagerById(@PathVariable Integer id) {
         return ResponseEntity.ok(authenticationService.getManagerById(id));
+    }
+
+// update this method later
+    @GetMapping("/collaborators")
+    public ResponseEntity<List<User>> getAllCollaborators() {
+        return ResponseEntity.ok(userService.getAllCollaborators());
     }
 }
