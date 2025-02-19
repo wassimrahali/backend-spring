@@ -11,9 +11,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+
 @Data
 @Entity
-@Table(name = "user")
+@Table(name = "users") // Use "users" instead of "user"
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +30,6 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role = Role.COLLABORATOR; // Set default role
-
 
     @JsonIgnore
     @ManyToOne
@@ -70,5 +70,4 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 }
