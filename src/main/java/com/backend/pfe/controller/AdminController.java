@@ -50,4 +50,6 @@ public class AdminController {
     public ResponseEntity<List<User>> getAllCollaborators() {
         return ResponseEntity.ok(userService.getAllCollaborators());
     }
+
+
 }

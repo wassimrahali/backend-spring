@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
         var user = userRepository.findByResetToken(token).orElse(null);
         if (user != null) {
             user.setPassword(passwordEncoder.encode(newPassword));
-            user.setResetToken(null);
+            user.setResetToken(token);
             userRepository.save(user);
             return true;
         }
@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
         emailService.sendHtmlEmail(
                 collaborator.getEmail(),
                 "Collaborator Account Created",
-                "collaborator-account-created", // Template name (without .html)
+                "collaborator-account-created",
                 context
         );
 
