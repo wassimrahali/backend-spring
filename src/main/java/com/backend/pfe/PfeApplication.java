@@ -30,7 +30,7 @@ public class PfeApplication implements CommandLineRunner {
 			user.setLastName("rahali");
 			user.setEmail("wassim.rahali@sofrecom.com");
 			user.setPassword(new BCryptPasswordEncoder().encode("admin"));
-			user.setRole(Role.COLLABORATOR);
+			user.setRole(Role.ADMIN);
 			userRepository.save(user);
 		}
 	}

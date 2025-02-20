@@ -10,12 +10,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
 @RequestMapping("/api/v1/auth")
+
 @RequiredArgsConstructor
 public class AuthentificationController {
 
     private final AuthenticationService authenticationService;
+
 
     @PostMapping("/signup")
     public ResponseEntity<User> signup(@RequestBody SignUpRequest signUpRequest) {
@@ -32,4 +35,11 @@ public class AuthentificationController {
     public ResponseEntity<JwtAuthentificationResponse> refresh(@RequestBody RefreshTokenRequest refreshTokenRequest) {
         return ResponseEntity.ok(authenticationService.refreshToken(refreshTokenRequest));
     }
+
+
+
+
+
+
+
 }

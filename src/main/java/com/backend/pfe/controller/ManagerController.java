@@ -10,7 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/v1/manager")
 @RequiredArgsConstructor
@@ -18,6 +20,14 @@ public class ManagerController {
 
     private final TeamService teamService;
     private final UserService userService;
+
+
+    @GetMapping("/users/{email}")
+    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
+        Optional<User> user = userService.findByEmail(email);
+        return user.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
     @PostMapping("/create-team")
     public ResponseEntity<Team> createTeam(@RequestBody Team team) {
